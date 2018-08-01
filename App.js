@@ -12,7 +12,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import RNImagePicker from 'react-native-image-picker';
 
@@ -23,17 +24,36 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component<{}> {
+  state = {
+    uri: ""
+  };
+
   openPicker = () => {
-    RNImagePicker.showImagePicker({}, res => console.log(res));
-  }
+    RNImagePicker.showImagePicker({}, res => {
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (res.error) {
+        console.log('ImagePicker Error: ', res.error);
+      } else {
+        let source = { uri: res.uri };
+        this.setState(source);
+      }
+    });
+  };
+
+  upload = () => {};
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.openPicker}>
+        <Image source={{ uri: this.state.uri }} style={styles.image} />
+        <TouchableOpacity style={styles.button} onPress={this.openPicker}>
           <Text>Open</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={this.upload}>
+          <Text>Send</Text>
         </TouchableOpacity>
       </View>
     );
@@ -46,6 +66,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    backgroundColor: '#eee',
+  },
+  button: {
+    padding: 20,
   },
   welcome: {
     fontSize: 20,
