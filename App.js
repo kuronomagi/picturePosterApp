@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import RNImagePicker from 'react-native-image-picker';
 
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
